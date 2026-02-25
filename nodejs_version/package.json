@@ -1,0 +1,31 @@
+{
+  "name": "stay-awake-nodejs",
+  "version": "0.3.0",
+  "description": "Keep your PC awake with Node.js - Prevent system sleep",
+  "main": "stay_awake.js",
+  "scripts": {
+    "start": "node stay_awake.js",
+    "dev": "node stay_awake.js"
+  },
+  "keywords": [
+    "windows",
+    "stay-awake",
+    "system",
+    "power-management",
+    "ffi"
+  ],
+  "author": "JavaScript Implementation",
+  "license": "MIT",
+  "dependencies": {
+    "ffi-napi": "^4.0.0",
+    "ref-napi": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "comments": {
+    "installation": "npm install",
+    "requirements": "Windows系统（XP SP3或更高版本）",
+    "note": "请以管理员身份运行此应用以获得最佳效果"
+  }
+}
