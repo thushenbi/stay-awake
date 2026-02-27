@@ -3,6 +3,8 @@
 # Stay Awake - PowerShell启动和配置脚本
 # =============================================================================
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 # 禁用错误停止以便继续执行
 $ErrorActionPreference = "Continue"
 
@@ -239,19 +241,17 @@ function Build-AllVersions {
         Write-Warning "  ! 无法编译 Python 版本"
     }
     
-    # 编译Node.js
-    Write-Host "[3/3] 编译 Node.js 版本..."
+    # 编译Node.js (Electron GUI)
+    Write-Host "[3/3] 编译 Node.js 版本 (Electron GUI)..."
     Push-Location nodejs_version
     
     npm install --quiet 2>$null
-    npm install -g pkg --quiet 2>$null
-    
-    pkg . --targets win --output ../output/stay_awake_nodejs.exe 2>$null
+    npm run build:win 2>$null
     
     if ($LASTEXITCODE -eq 0) {
         Write-Success "  ✓ Node.js 编译成功 (stay_awake_nodejs.exe)"
     } else {
-        Write-Warning "  ! Node.js 编译失败（这可能是正常的）"
+        Write-Warning "  ! Node.js 编译失败（请确认 Node.js 16+ 已安装）"
     }
     
     Pop-Location

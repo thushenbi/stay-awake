@@ -1,31 +1,60 @@
 {
   "name": "stay-awake-nodejs",
   "version": "0.3.0",
-  "description": "Keep your PC awake with Node.js - Prevent system sleep",
-  "main": "stay_awake.js",
+  "description": "Keep your PC awake with Node.js/Electron - GUI版本",
+  "main": "main.js",
   "scripts": {
-    "start": "node stay_awake.js",
-    "dev": "node stay_awake.js"
+    "start": "electron .",
+    "dev": "electron .",
+    "build:win": "electron-builder --win --x64",
+    "cli": "node stay_awake.js"
   },
   "keywords": [
     "windows",
     "stay-awake",
     "system",
     "power-management",
-    "ffi"
+    "electron"
   ],
   "author": "JavaScript Implementation",
   "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.4.0",
+    "electron-builder": "^25.1.8"
+  },
   "dependencies": {
     "ffi-napi": "^4.0.0",
     "ref-napi": "^3.0.0"
   },
+  "build": {
+    "appId": "com.stayawake.nodejs",
+    "productName": "Stay Awake",
+    "directories": {
+      "output": "../output"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "stay_awake_nodejs.exe"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "renderer.js"
+    ]
+  },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16.0.0"
   },
   "comments": {
     "installation": "npm install",
-    "requirements": "Windows系统（XP SP3或更高版本）",
-    "note": "请以管理员身份运行此应用以获得最佳效果"
+    "build": "npm run build:win",
+    "requirements": "Windows 10/11 (x64)",
+    "note": "GUI版本使用Electron，命令行版本运行: npm run cli"
   }
 }
