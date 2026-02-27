@@ -3,6 +3,8 @@
 # Stay Awake - PowerShell启动和配置脚本
 # =============================================================================
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 # 禁用错误停止以便继续执行
 $ErrorActionPreference = "Continue"
 

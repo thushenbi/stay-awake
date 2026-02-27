@@ -3,6 +3,7 @@
   "version": "0.3.0",
   "description": "Keep your PC awake with Node.js - Prevent system sleep",
   "main": "stay_awake.js",
+  "bin": "stay_awake.js",
   "scripts": {
     "start": "node stay_awake.js",
     "dev": "node stay_awake.js"
