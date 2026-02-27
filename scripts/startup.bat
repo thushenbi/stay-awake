@@ -263,14 +263,13 @@ if errorlevel 1 (
     cd ..
 )
 
-REM 编译 Node.js
-echo [3/3] 编译 Node.js 版本...
+REM 编译 Node.js (Electron GUI)
+echo [3/3] 编译 Node.js 版本 (Electron GUI)...
 cd nodejs_version
 call npm install --quiet >nul 2>&1
-call npm install -g pkg --quiet >nul 2>&1
-call pkg . --targets win --output ..\output\stay_awake_nodejs.exe >nul 2>&1
+call npm run build:win >nul 2>&1
 if errorlevel 1 (
-    echo   ! Node.js 编译可能失败（这是正常的，需要依赖复杂）
+    echo   ! Node.js 编译失败（请确认 Node.js 16+ 已安装）
 ) else (
     echo   ✓ Node.js 编译成功 (stay_awake_nodejs.exe)
 )
