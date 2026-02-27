@@ -1,11 +1,12 @@
 @echo off
+chcp 65001 >nul
 REM =============================================================================
 REM Stay Awake - 环境配置和一键启动脚本
 REM =============================================================================
 
 setlocal enabledelayedexpansion
 color 0A
-title Stay Awake - Configuration & Launch
+title Stay Awake - Configuration and Launch
 
 echo.
 echo ============================================================================
@@ -14,7 +15,7 @@ echo ===========================================================================
 echo.
 
 REM 检查环境
-echo [检查环境配置...]
+echo --- 检查环境配置 ---
 echo.
 
 REM 检查Python
@@ -41,9 +42,9 @@ if %errorlevel% equ 0 (
 
 REM 检查npm
 echo 检查 npm...
-npm --version >nul 2>&1
+call npm --version >nul 2>&1
 if %errorlevel% equ 0 (
-    for /f "tokens=*" %%i in ('npm --version') do (
+    for /f "tokens=*" %%i in ('call npm --version') do (
         echo   ✓ npm %%i 已安装
     )
 ) else (
@@ -193,10 +194,15 @@ cd cpp_version
 REM 检查编译
 if not exist "stay_awake.exe" (
     echo 编译应用中（首次运行）...
-    g++ -O2 -o stay_awake.exe stay_awake.cpp -std=c++17 -lkernel32
-    if errorlevel 1 (
+    g++ --version >nul 2>&1
+    if %errorlevel% equ 0 (
+        g++ -O2 -o stay_awake.exe stay_awake.cpp -std=c++17 -lkernel32
+    ) else (
+        cl.exe /utf-8 /EHsc /O2 /Fe:stay_awake.exe stay_awake.cpp >nul 2>&1
+    )
+    if not exist "stay_awake.exe" (
         echo.
-        echo 编译失败！请确保已安装 g++
+        echo 编译失败！请确保已安装 g++ 或 cl.exe
         pause
         cd ..
         goto :end
@@ -226,8 +232,13 @@ echo [1/3] 编译 C++ 版本...
 cd cpp_version
 if exist stay_awake.exe del stay_awake.exe
 echo   编译中...
-g++ -O3 -march=native -s -o stay_awake.exe stay_awake.cpp -std=c++17 -lkernel32
-if errorlevel 1 (
+g++ --version >nul 2>&1
+if %errorlevel% equ 0 (
+    g++ -O3 -march=native -s -o stay_awake.exe stay_awake.cpp -std=c++17 -lkernel32
+) else (
+    cl.exe /utf-8 /EHsc /O2 /Fe:stay_awake.exe stay_awake.cpp >nul 2>&1
+)
+if not exist stay_awake.exe (
     echo   ✗ C++ 编译失败
     cd ..
     goto :after_build

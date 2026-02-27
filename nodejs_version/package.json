@@ -1,31 +1,34 @@
 {
-  "name": "stay-awake-nodejs",
-  "version": "0.3.0",
-  "description": "Keep your PC awake with Node.js - Prevent system sleep",
-  "main": "stay_awake.js",
+  "name": "stay-awake-gui",
+  "version": "1.0.0",
+  "description": "��ֹϵͳ���ߵ����湤��",
+  "main": "main.js",
   "scripts": {
-    "start": "node stay_awake.js",
-    "dev": "node stay_awake.js"
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "keywords": [
-    "windows",
+    "electron",
     "stay-awake",
-    "system",
-    "power-management",
-    "ffi"
+    "windows"
   ],
   "author": "JavaScript Implementation",
   "license": "MIT",
-  "dependencies": {
-    "ffi-napi": "^4.0.0",
-    "ref-napi": "^3.0.0"
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
   },
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "comments": {
-    "installation": "npm install",
-    "requirements": "Windows系统（XP SP3或更高版本）",
-    "note": "请以管理员身份运行此应用以获得最佳效果"
+  "dependencies": {},
+  "build": {
+    "appId": "com.stayawake.app",
+    "productName": "Stay Awake",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

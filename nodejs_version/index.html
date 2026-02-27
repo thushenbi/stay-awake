@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stay Awake</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f3f3f3;
+      color: #222;
+      padding: 20px;
+      user-select: none;
+    }
+
+    /* ── 标题 ── */
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    /* ── 卡片 ── */
+    .card {
+      background: #fbfbfb;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .card-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+    }
+
+    .card-label {
+      font-size: 14px;
+    }
+
+    /* ── 开关 ── */
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 26px;
+    }
+    .toggle input { display: none; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-track { background: #0078d7; }
+    .toggle input:checked + .toggle-track::after { transform: translateX(26px); }
+    .toggle input:disabled + .toggle-track { opacity: 0.4; cursor: default; }
+
+    /* ── 节标题 ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      padding: 12px 16px 4px;
+    }
+
+    /* ── 模式单选 ── */
+    .mode-card {
+      background: #fbfbfb;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .mode-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px 16px;
+      cursor: pointer;
+      gap: 12px;
+    }
+    .mode-row:not(:last-child) {
+      border-bottom: 1px solid #ececec;
+    }
+    .mode-row input[type="radio"] {
+      margin-top: 3px;
+      accent-color: #0078d7;
+      cursor: pointer;
+    }
+    .mode-row input[type="radio"]:disabled { cursor: default; }
+
+    .mode-text .mode-name {
+      font-size: 14px;
+    }
+    .mode-text .mode-desc {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    /* 禁用状态 */
+    .mode-row.disabled { opacity: 0.4; pointer-events: none; }
+
+    /* ── 时间输入 ── */
+    .time-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 16px 14px 44px;
+    }
+    .time-field label {
+      display: block;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    .time-field input {
+      width: 90px;
+      padding: 5px 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 13px;
+    }
+    .time-field input:disabled {
+      background: #eee;
+      color: #aaa;
+    }
+
+    /* ── 状态栏 ── */
+    #status-bar {
+      background: #e8f4fe;
+      border: 1px solid #b3d7f8;
+      border-radius: 4px;
+      padding: 10px 16px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    #status-bar .status-row { display: flex; gap: 8px; }
+    #status-bar .status-key { color: #555; min-width: 70px; }
+    #status-bar .status-val { font-weight: 600; }
+    .status-val.on  { color: #107c10; }
+    .status-val.off { color: #d13438; }
+  </style>
+</head>
+<body>
+
+  <h1>🌙 Stay Awake</h1>
+
+  <!-- ── 启用开关 ── -->
+  <div class="card">
+    <div class="card-row">
+      <span class="card-label">启用唤醒 (Enable Awake)</span>
+      <label class="toggle">
+        <input type="checkbox" id="cb-enable" />
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- ── 行为 ── -->
+  <div class="section-title">行为 (Behavior)</div>
+  <div class="card">
+    <div class="card-row">
+      <span class="card-label">保持屏幕开启 (Keep screen on)</span>
+      <label class="toggle">
+        <input type="checkbox" id="cb-display" />
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- ── 模式 ── -->
+  <div class="section-title">模式 (Mode)</div>
+  <div class="mode-card">
+    <!-- 被动模式 -->
+    <label class="mode-row" id="row-passive">
+      <input type="radio" name="mode" value="passive" id="rb-passive" checked />
+      <div class="mode-text">
+        <div class="mode-name">不活跃 (Inactive)</div>
+        <div class="mode-desc">按照当前电源计划运行</div>
+      </div>
+    </label>
+
+    <!-- 无限唤醒 -->
+    <label class="mode-row" id="row-indefinite">
+      <input type="radio" name="mode" value="indefinite" id="rb-indefinite" />
+      <div class="mode-text">
+        <div class="mode-name">无限保持唤醒 (Keep awake indefinitely)</div>
+        <div class="mode-desc">持续保持系统唤醒，直到手动关闭</div>
+      </div>
+    </label>
+
+    <!-- 临时唤醒 -->
+    <label class="mode-row" id="row-temporary">
+      <input type="radio" name="mode" value="temporary" id="rb-temporary" />
+      <div class="mode-text">
+        <div class="mode-name">临时保持唤醒 (Keep awake temporarily)</div>
+        <div class="mode-desc">在指定时间内保持唤醒</div>
+      </div>
+    </label>
+
+        <!-- 时间输入（临时模式）：上限与 AHK 版本一致，约 49.7 天 -->
+        <div class="time-row" id="time-row">
+          <div class="time-field">
+            <label>小时 (Hours)</label>
+            <!-- 最大 1192 小时 ≈ 49.7 天，与 AHK 版本保持一致 -->
+            <input type="number" id="ed-hours" min="0" max="1192" value="1" />
+          </div>
+          <div class="time-field">
+            <label>分钟 (Minutes)</label>
+            <!-- 最大 71568 分钟 ≈ 49.7 天，与 AHK 版本保持一致 -->
+            <input type="number" id="ed-minutes" min="0" max="71568" value="0" />
+          </div>
+        </div>
+  </div>
+
+  <!-- ── 当前状态 ── -->
+  <div class="section-title">当前状态 (Current Status)</div>
+  <div id="status-bar">
+    <div class="status-row">
+      <span class="status-key">唤醒：</span>
+      <span class="status-val off" id="st-enabled">已禁用</span>
+    </div>
+    <div class="status-row">
+      <span class="status-key">模式：</span>
+      <span class="status-val" id="st-mode">—</span>
+    </div>
+    <div class="status-row">
+      <span class="status-key">屏幕：</span>
+      <span class="status-val off" id="st-screen">关闭</span>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
