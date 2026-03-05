@@ -1,0 +1,34 @@
+{
+  "name": "stay-awake-gui",
+  "version": "1.0.0",
+  "description": "��ֹϵͳ���ߵ����湤��",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "stay-awake",
+    "windows"
+  ],
+  "author": "JavaScript Implementation",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {},
+  "build": {
+    "appId": "com.stayawake.app",
+    "productName": "Stay Awake",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
